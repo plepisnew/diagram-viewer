@@ -1,0 +1,5 @@
+Users can register, login, and logout
+Users can modify their profile details such as avatar and description
+Users can create sellable products
+Users can purchase products that other users have listed
+Admins can forcibly modify or delete existing products
