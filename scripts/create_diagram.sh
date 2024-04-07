@@ -1,4 +1,8 @@
 
-# `dotenv` CLI is required and OPENAI_API_KEY variable is required in ${workspace}/.env
+# API_KEY environment variable must be set before running this script
 
-python3 ./src/program.py ./assets/data/reqs1.txt
+# Creates diagram by specifying path to input data
+python3 ./src/program.py --input-data ./assets/data/reqs1.txt --api-key $API_KEY
+
+# Creates diagram by getting guidelines every time
+# python3 ./src/program.py --input-data ./assets/data/reqs1.txt --api-key $API_KEY --dynamic-guidelines
