@@ -1,126 +1,142 @@
 import os
 from sys import argv
 import requests
-from openai import OpenAI
+from openai import OpenAI, OpenAIError
+import re
 
 options = {
-    "openai_api_key": "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",
-    "showmediagrams_guidelines_url": "https://showme.redstarplugin.com/diagram-guidelines",
-    "showmediagrams_render_url": "https://showme.redstarplugin.com/render",
+    "openai_api_key": os.environ.get("OPENAI_API_KEY"),
+    "showmediagrams_api_base_url": "https://showme.redstarplugin.com",
+    "showmediagrams_api_guidelines_path": "/diagram-guidelines",
+    "showmediagrams_api_render_path": "/render",
 }
 
-openai_client = OpenAI(api_key=options["openai_api_key"])
+class Program:
 
+    def __init__(self):
+        try:
+            self.__openai_client__ = OpenAI(api_key=options["openai_api_key"])
+        except OpenAIError as err:
+            print("[ERROR] Please specify the environment variable OPENAI_API_KEY to enable API calls against ChatGPT")
+            exit(1)
 
-def read_input_data():
+        api_base_url = options["showmediagrams_api_base_url"]
+        self.__guidelines_url__ = f"{api_base_url}{options['showmediagrams_api_guidelines_path']}"
+        self.__render_url__ = f"{api_base_url}{options['showmediagrams_api_render_path']}"
 
-    if len(argv) < 2:
-        print("[ERROR] The first argument should contain a path to the input data")
-        print("e.g. -- python ./src/program.py ./assets/data/reqs1.txt")
-        exit(1)
+    def model_diagram(self):
+        input_data = self.__read_input_data()
 
-    path_to_input_data = argv[1]
+        user_message = self.__refine_prompt(input_data)
+        system_message = self.__get_diagram_guidelines()
 
-    try:
-        with open(path_to_input_data) as file:
-            input_data = file.readlines()
-    except:
-        print(
-            f"[ERROR] Unable to read contents of '{path_to_input_data}'. Does the file exist?"
-        )
-        exit(1)
+        diagram = self.__create_diagram(system_message, user_message)
+        url = self.__render_diagram(diagram)
 
-    input_data_lines = "".join(input_data)
+    def __read_input_data(self):
+        if len(argv) < 2:
+            print("[ERROR] The first program argument should contain a path to the input data")
+            print("e.g. -- python3 ./src/program.py ./assets/data/reqs1.txt")
+            exit(1)
 
-    print(f"[INFO] Successfully read input data from '{path_to_input_data}':")
-    print(input_data_lines, end="\n\n")
+        path_to_input_data = argv[1]
 
-    return input_data_lines
+        try:
+            with open(path_to_input_data) as file:
+                input_data = file.readlines()
+        except:
+            print(f"[ERROR] Unable to read contents of '{path_to_input_data}'. Does the file exist?")
+            exit(1)
 
+        input_data_lines = "".join(input_data)
 
-def get_diagram_guidelines():
-    request_payload = {
-        "explicitlyRequestedByUserDiagramLanguage": "mermaid",
-        "diagramType": "graph",
-    }
+        print(f"[INFO] Successfully read input data from '{path_to_input_data}':")
+        print(input_data_lines, end="\n\n")
 
-    response = requests.get(
-        options["showmediagrams_guidelines_url"], params=request_payload
-    )
+        return input_data_lines
 
-    if not response.ok:
-        error = response.text
-        raise RuntimeError(f"[ERROR] Unable to fetch diagram guidelines:\n{error}")
+    def __get_diagram_guidelines(self):
+        request_payload = {
+            "explicitlyRequestedByUserDiagramLanguage": "mermaid",
+            "diagramType": "graph",
+        }
 
-    response_payload = response.json()
-    diagram_guidelines = response_payload["diagramGuidelines"]
+        response = requests.get(self.__guidelines_url__, params=request_payload)
 
-    return diagram_guidelines
+        if not response.ok:
+            error = response.text
+            print(f"[ERROR] Unable to fetch diagram guidelines: {error}")
+            exit(1)
 
+        response_payload = response.json()
+        diagram_guidelines = response_payload["diagramGuidelines"]
 
-def refine_prompt(input_data):
-    system_message = get_diagram_guidelines()
+        return diagram_guidelines
 
-    # Preprocess input data here
-    user_message = input_data
+    def __refine_prompt(self, input_data):
+        # Preprocess input data here
+        user_message = input_data
 
-    print(f"[INFO] Successfully refined prompt:")
-    print(f"{system_message}\n{user_message}", end="\n\n")
+        return user_message
 
-    return system_message, user_message
-
-
-def create_diagram(system_message, user_message):
-    # response = openai_client.chat.completions.create(
-    #     model="gpt-3.5-turbo",
-    #     messages=[
-    #         {"role": "system", "content": system_message},
-    #         {"role": "user", "content": user_message},
-    #     ],
-    # )
-
-    # response_content = response.choices[0].message.content
-
-    response_content = """
-```mermaid
-graph TB
-  U["User"] -- "Register" --> L["Login"]
-  U -- "Modify<br />Profile Details" --> UPD["Update Profile"]
-  U -- "Create<br />Sellable Products" --> CSP["Create Products"]
-  U -- "Purchase Products" --> PP["Purchase Products"]
-  U -- "Logout" --> LO[""]
-  A["Admin"] -- "Modify or Delete Products" --> CSP
-```
+    def __create_diagram(self, system_message, user_message):
+        # response = openai_client.chat.completions.create(
+        #     model="gpt-3.5-turbo",
+        #     messages=[
+        #         {"role": "system", "content": system_message},
+        #         {"role": "user", "content": user_message},
+        #     ],
+        # )
+    
+        # response_content = response.choices[0].message.content
+    
+        response_content = """graph TB
+  A["Web Browser"] -- "HTTP API Request" --> B["Load Balancer"]
+  B -- "HTTP Request" --> C["Crossover"]
+  C -- "Talks to" --> D["Redis"]
+  C -- "Talks to" --> E["MySQL"]
+  C -- "Downstream API Request" --> F["Multiplex"]
+  F -- "Returns Job ID" --> C
+  C -- "Long Poll API Request" --> G["Evaluator"]
+  G -- "API Call" --> F
+  G -- "API Call" --> H["Result-Fetcher"]
+  H -- "Downloads Results" --> I["S3 or GCP Cloud Buckets"]
+  I -- "Results Stream" --> G
+  G -- "Results Stream" --> C
+  C -- "API Response" --> A
 """
+    
+        print("[INFO] Successfully created diagram:")
+        print(response_content, end="\n\n")
+    
+        return response_content
 
-    print("[INFO] Successfully created diagram:")
-    print(response_content, end="\n\n")
+    def __render_diagram(self, diagram):
+        request_payload = {
+            "diagramLanguage": "mermaid",
+            "diagramType": "graph",
+            "d2Theme": "neutral-grey_sketch",
+            "diagram": diagram,
+        }
 
-    return response_content
+        response = requests.get(self.__render_url__, params=request_payload)
+        response_payload = response.json()
+        api_result = response_payload["results"][0]
 
+        system_response = api_result["interpretingTheAPIResponse"]
+        extract_url_regex = "(?<=\[View fullscreen diagram\]\().*(?=\))"
 
-def render_diagram(diagram):
-    request_payload = {
-        "diagramLanguage": "mermaid",
-        "diagramType": "graph",
-        "d2Theme": "neutral-grey_sketch",
-        "diagram": diagram,
-    }
+        if match := re.search(extract_url_regex, system_response):
+            diagram_url = match.group(0)
+        else:
+            print("[ERROR] Unable to render diagram")
+            print(response.text)
+            exit(1)
 
-    response = requests.get(
-        options["showmediagrams_render_url"], params=request_payload
-    )
+        print(f"[INFO] Successfully rendered diagram: {diagram_url}")
+        print(system_response)
 
-    if not response.ok:
-        raise RuntimeError("[ERROR] Unable to fetch diagram guidelines")
+        return system_response
 
-    response_payload = response.json()
-    print(response_payload["results"])
-
-    return response_payload
-
-
-input_data = read_input_data()
-system_message, user_message = refine_prompt(input_data)
-diagram = create_diagram(system_message, user_message)
-output = render_diagram(diagram)
+runner = Program()
+runner.model_diagram()
