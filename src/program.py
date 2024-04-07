@@ -3,17 +3,22 @@ from sys import argv
 import requests
 from openai import OpenAI, OpenAIError
 import re
+from parse_args import program_args
 
 options = {
-    "openai_api_key": os.environ.get("OPENAI_API_KEY"),
+    "openai_api_key": program_args["api_key"],
+    "input_data_descriptor": program_args["input_data"],
+    "cache_guidelines": program_args["cache_guidelines"],
     "showmediagrams_api_base_url": "https://showme.redstarplugin.com",
     "showmediagrams_api_guidelines_path": "/diagram-guidelines",
-    "showmediagrams_api_render_path": "/render",
+    "showmediagrams_api_render_path": "/render"
 }
 
-class Program:
+print(options)
 
+class Program:
     def __init__(self):
+
         try:
             self.__openai_client__ = OpenAI(api_key=options["openai_api_key"])
         except OpenAIError as err:
@@ -138,5 +143,5 @@ class Program:
 
         return system_response
 
-runner = Program()
-runner.model_diagram()
+# runner = Program()
+# runner.model_diagram()
