@@ -29,7 +29,7 @@ class Program:
         user_message = self.__refine_input__(input_data)
 
         diagram_guidelines = self.__read_diagram_guidelines__()
-        system_message = self.__read_diagram_guidelines__()
+        system_message = self.__refine_prompt__(diagram_guidelines)
 
         diagram = self.__create_diagram__(system_message, user_message)
         diagram_url = self.__render_diagram__(diagram)
