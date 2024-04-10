@@ -8,6 +8,8 @@ from pathlib import Path
 
 __diagrams_api_base_url__ = "https://showme.redstarplugin.com"
 
+# TODO guidelines, paper up to date
+
 options = {
     "openai_api_key": program_args["api_key"],
     "input_data_descriptor": program_args["input_data"],
@@ -24,19 +26,16 @@ class Program:
     # Performs the entire Requirements Modeling flow
     def model_diagram(self):
         input_data = self.__read_input_data__()
+        user_message = self.__refine_input__(input_data)
 
-        user_message = self.__refine_prompt__(input_data)
-        system_message = self.__get_diagram_guidelines__()
+        diagram_guidelines = self.__read_diagram_guidelines__()
+        system_message = self.__read_diagram_guidelines__()
 
         diagram = self.__create_diagram__(system_message, user_message)
         diagram_url = self.__render_diagram__(diagram)
         print(diagram_url)
 
-    def debug(self):
-        self.__read_input_data__()
-        print(options)
-
-    # Reads input from the local filesystem if an existing path is passed
+    # Reads input from the local filesystem if an existing path is passed; otherwise use parameter as payload
     def __read_input_data__(self):
         input_data = options["input_data_descriptor"]
 
@@ -51,8 +50,14 @@ class Program:
 
         return input_data
 
+    # Clean up the input data either by re-formatting or making slight adjustments. This yields the user message (data)
+    def __refine_input__(self, input_data):
+        user_message = input_data
+
+        return user_message
+
     # Obtains Mermaid Graph diagram guidelines either by reading them from the cache or requesting from Diagrams API
-    def __get_diagram_guidelines__(self):
+    def __read_diagram_guidelines__(self):
         if options["cache_guidelines"]:
             cached_guidelines_path = os.path.join(Path(__file__).parent, "mermaid_graph_guidelines.txt")
             
@@ -64,7 +69,7 @@ class Program:
 
         request_payload = {
             "explicitlyRequestedByUserDiagramLanguage": "mermaid",
-            "diagramType": "graph",
+            "diagramType": "requirement",
         }
 
         response = requests.get(options["diagrams_api_guidelines_url"], params=request_payload)
@@ -81,15 +86,13 @@ class Program:
 
         return diagram_guidelines
 
-    # Apply Prompt Engineering guidelines
-    def __refine_prompt__(self, input_data):
-        # Preprocess input data here
-        user_message = input_data
+    # Applies different Prompt Engineering strategies and guidelines to optimize generated diagrams. This yields the system message (metadata)
+    def __refine_prompt__(self, guidelines):
+        system_message = guidelines
+        
+        return system_message
 
-        return user_message
-
-
-    # Creates the diagram by giving ChatGPT diagram guidelines and requirements
+    # Creates the diagram by giving ChatGPT a system message (guidelines + prompt techniques) and a user message (cleaned up input data)
     def __create_diagram__(self, system_message, user_message):
         response = self.__openai_client__.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -100,6 +103,7 @@ class Program:
         )
     
         response_payload = response.choices[0].message.content
+        # get_code_regex = "(?<=```requirementDiagram\\n)(.|\\n)*(?=```)"
         get_code_regex = "(?<=```mermaid\\n)(.|\\n)*(?=```)"
         
         if match := re.search(get_code_regex, response_payload):
