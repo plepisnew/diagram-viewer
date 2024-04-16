@@ -1,0 +1,16 @@
+[
+  {
+    "to": "Swagger Editor (used for OpenAPI spec parsing in testing)",
+    "href": "https://editor.swagger.io/"
+  },
+  {
+    "to": "Diagrams API: Plugin Discovery",
+    "href": "https://plugin.surf/plugin/show-me-diagrams"
+  },
+  {
+    "to": "Knowledge Expansion: Diagrams",
+    "href": [
+      "https://github.com/plantuml-stdlib/C4-PlantUML"
+    ]
+  }
+]

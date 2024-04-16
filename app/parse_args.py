@@ -38,4 +38,5 @@ parser.add_argument(
   help="If specified, the diagram will be written to your file system with the specified name"
 )
 
+
 program_args = vars(parser.parse_args())

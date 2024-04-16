@@ -59,7 +59,8 @@ graph TB
   FS -- "Compress<br />Decompress" --> ZL["ZipLib"]
   FS -- "Read" --> IP["INIParser"]
   CE -- "Create<br />Display<br />Edit" --> WV["Webview"]
-  CE -- "Language<br />Code Analysis" --> VCA["VSCodeAPI"]
+  CE -- "Language
+  Code Analysis" --> VCA["VSCodeAPI"]
   VCA -- "Talks to" --> VE["ValidationEngine"]
   WV -- "Render UI" --> HC["HTMLCSS"]
   VE -- "Decorate Errors" --> ED["ErrorDecoration"]

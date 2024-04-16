@@ -1,8 +1,12 @@
 {
   "cSpell.words": [
+    "automater",
     "fullscreen",
+    "GPTAPI",
+    "mindmap",
     "openai",
     "reqs",
     "showmediagrams"
-  ]
+  ],
+  "prettier.printWidth": 120
 }

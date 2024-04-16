@@ -1,0 +1,23 @@
+{
+  "name": "diagram-viewer",
+  "version": "1.0.0",
+  "description": "## Sample usage",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./app/server.js",
+    "start": "node ./app/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "chatgpt": "^5.2.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0",
+    "zod": "^3.22.4"
+  }
+}

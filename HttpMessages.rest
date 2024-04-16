@@ -1,0 +1,9 @@
+@API_URL = http://localhost:3000
+@MODEL_PATH = model
+
+POST {{API_URL}}/{{MODEL_PATH}}
+Content-Type: application/json
+
+{
+
+}

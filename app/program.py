@@ -1,31 +1,40 @@
 import os
 from sys import argv
 import requests
-from openai import OpenAI
+import openai
 import re
-from parse_args import program_args
 from pathlib import Path
 
 __diagrams_api_base_url__ = "https://showme.redstarplugin.com"
 
-# TODO guidelines, paper up to date
+if __name__ == "__main__":
+    from app.parse_args import program_args
+    options = {
+        "openai_api_key": program_args["api_key"],
+        "input_data_descriptor": program_args["input_data"],
+        "cache_guidelines": program_args["cache_guidelines"],
+        "diagrams_api_base_url": __diagrams_api_base_url__,
+        "diagrams_api_guidelines_url": f"{__diagrams_api_base_url__}/diagram-guidelines",
+        "diagrams_api_render_url": f"{__diagrams_api_base_url__}/render"
+    }
 
 options = {
-    "openai_api_key": program_args["api_key"],
+    "openai_api_key": ,
     "input_data_descriptor": program_args["input_data"],
-    "cache_guidelines": program_args["cache_guidelines"],
     "diagrams_api_base_url": __diagrams_api_base_url__,
     "diagrams_api_guidelines_url": f"{__diagrams_api_base_url__}/diagram-guidelines",
     "diagrams_api_render_url": f"{__diagrams_api_base_url__}/render"
 }
 
 class Program:
-    def __init__(self):
-        self.__openai_client__ = OpenAI(api_key=options["openai_api_key"])
+    def __init__(self, api_key):
+        self.openai_client = openai.OpenAI(api_key=api_key)
 
     # Performs the entire Requirements Modeling flow
-    def model_diagram(self):
-        input_data = self.__read_input_data__()
+    def model_diagram(self, data):
+        if data is None:
+            return { "ok": False, "error": "Missing input data" }
+        
         user_message = self.__refine_input__(input_data)
 
         diagram_guidelines = self.__read_diagram_guidelines__()
@@ -93,15 +102,20 @@ class Program:
         return system_message
 
     # Creates the diagram by giving ChatGPT a system message (guidelines + prompt techniques) and a user message (cleaned up input data)
-    def __create_diagram__(self, system_message, user_message):
-        response = self.__openai_client__.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_message},
-                {"role": "user", "content": user_message},
-            ],
-        )
-    
+    def __create_diagram__(self, system_message, user_message, temperature):
+        try:
+            response = self.__openai_client__.chat.completions.create(
+                model="gpt-3.5-turbo",
+                temperature=temperature,
+                messages=[
+                    {"role": "system", "content": system_message},
+                    {"role": "user", "content": user_message},
+                ],
+            )
+        except openai.AuthenticationError:
+            print("[ERROR] Invalid API key presented")
+            exit(1)
+
         response_payload = response.choices[0].message.content
         # get_code_regex = "(?<=```requirementDiagram\\n)(.|\\n)*(?=```)"
         get_code_regex = "(?<=```mermaid\\n)(.|\\n)*(?=```)"
