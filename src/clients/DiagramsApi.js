@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Logger } from "../lib/Logger";
+import { Logger, LoggerFactory } from "../lib/Logger";
 import { z } from "zod";
 
 export class DiagramsApi {
@@ -29,7 +29,7 @@ export class DiagramsApi {
   };
 
   _internalApiClient;
-  _logger = Logger.create((m) => `[DiagramsApi] ${Date.now()} -- ${m}`);
+  _loggerFactory;
 
   // Initialize HTTP client for delivering messages to Diagrams API
   constructor() {
@@ -38,6 +38,7 @@ export class DiagramsApi {
     axios.defaults.headers.common["Content-Type"] = "application/json";
 
     this._internalApiClient = axios.create({ baseURL: DiagramsApi._baseUrl });
+    this._loggerFactory = new LoggerFactory("DiagramsApi");
   }
 
   /**
@@ -46,14 +47,19 @@ export class DiagramsApi {
    * Promise<{ language: string; guidelines: string; } | null>}
    */
   async getGuidelines(request) {
+    const logger = this._loggerFactory.create("Guidelines");
+    logger.log(
+      `Requesting guidelines for composing "${request?.diagramType}" diagrams written in "${request?.language}"`
+    );
+
     const requestParse = DiagramsApi.Schemas.getGuidelines.Request.safeParse(request);
 
     if (!requestParse.success) {
+      logger.log("Denying guidelines request:", requestParse.error);
       return null;
     }
 
     const { diagramType, language } = requestParse.data;
-    this._logger.log(`Requesting guidelines for composing "${diagramType}" diagrams written in "${language}"`);
 
     const apiResponse = await this._internalApiClient.get(DiagramsApi._guidelinesPath, {
       params: {
@@ -68,6 +74,8 @@ export class DiagramsApi {
       language: diagramLanguage,
     };
 
+    logger.log("Obtained guidelines:", diagramGuidelines, 9);
+
     const responseParse = DiagramsApi.Schemas.getGuidelines.Response.safeParse(response);
 
     return responseParse.success ? responseParse.data : null;
@@ -79,14 +87,15 @@ export class DiagramsApi {
    * Promise<{ message: string; url: string; } | null>}
    */
   async render(request) {
+    const logger = this._loggerFactory.create("Render");
     const requestParse = DiagramsApi.Schemas.render.Request.safeParse(request);
 
+    logger.log(`Initializing Diagrams API Render request context for diagram:`, request?.model);
+
     if (!requestParse.success) {
-      this._logger.log(`Denying Diagram Render API request: ${requestParse.error}`);
+      logger.log("Denying Diagram Render API request:", requestParse.error);
       return null;
     }
-
-    this._logger.log(`Initializing Diagram Render API request context for diagram:\n${request?.model}`);
 
     const { diagramType, language, model } = requestParse.data;
     const escapeDiagramRegex_1 = /```mermaid(?:\n+)?([\s\S]*?)(?:\n+)?```/;
@@ -94,7 +103,7 @@ export class DiagramsApi {
 
     const escapedDiagram =
       model.match(escapeDiagramRegex_1)?.at(1) || model.match(escapeDiagramRegex_2)?.at(2) || "<empty>";
-    this._logger.log(`Escaping diagram from raw response message:\n${escapedDiagram}`);
+    logger.log("Escaping diagram from raw response message:", escapedDiagram);
 
     const apiResponse = await this._internalApiClient.get(DiagramsApi._renderPath, {
       params: {
@@ -111,13 +120,13 @@ export class DiagramsApi {
     const url = apiMessage.match(extractUrlRegex)?.at(0);
 
     if (url) {
-      this._logger.log(`Successfully rendered ${language}/${diagramType} to ${url}`);
+      logger.log(`Successfully rendered ${language}/${diagramType} to ${url}`);
 
       return url;
     }
 
     const apiError = result.errorMessage;
-    this._logger.log(`Failed to render ${language}/${diagramType}:\n${apiError}`);
+    logger.log("Failed to render ${language}/${diagramType}:", apiError);
 
     return null;
   }

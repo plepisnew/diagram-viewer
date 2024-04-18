@@ -1,32 +1,44 @@
 export class Logger {
   static _index = 0;
-
-  static create(payloadTransformer) {
-    return new Logger(payloadTransformer);
-  }
-
-  _payloadTransformer;
   _requestId;
+  _prefix;
 
-  constructor(payloadTransformer) {
-    this._payloadTransformer = payloadTransformer;
+  constructor(prefix) {
+    this._requestId = crypto.randomUUID();
+    this._prefix = prefix;
   }
 
-  cleanContext() {
-    const requestId = crypto.randomUUID();
-    this._requestId = requestId;
-
-    return requestId;
-  }
-
-  log(payload) {
+  log(message, payload, maxLines) {
     Logger._index++;
-    const transformed = this._payloadTransformer(payload);
 
-    Logger._index % 2 === 0
-      ? console.log("\x1b[36m%s\x1b[0m", transformed)
-      : console.log(transformed);
+    const messageLine = `${this._prefix} ${Date.now()} -- ${message}`;
+    const payloadLines = typeof payload === "string" ? payload.split("\n") : [];
+    const shortenedLines = payloadLines.slice(0, maxLines);
+
+    const transformedPayloadLines = shortenedLines.map((line, lineIndex) => `[${lineIndex + 1}] ${line}`);
+
+    if (payloadLines.length > shortenedLines.length) {
+      transformedPayloadLines.push(`[${transformedPayloadLines.length + 1}] ...`);
+    }
+
+    const result = [messageLine, ...transformedPayloadLines].join("\n");
+
+    Logger._index % 2 === 0 ? console.log("\x1b[36m%s\x1b[0m", result) : console.log(result);
+    console.log();
   }
 }
 
-// Simple UI+CLI for quickly generating lots of diagrams based on input data (tweaking options or prompt in different directions)
+export class LoggerFactory {
+  _scope;
+
+  constructor(scope) {
+    this._scope = scope;
+  }
+
+  create(subScope) {
+    const prefix = `[${this._scope}:${subScope}]`;
+    const logger = new Logger(prefix);
+
+    return logger;
+  }
+}
