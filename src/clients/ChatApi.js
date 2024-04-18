@@ -1,6 +1,6 @@
 import { ChatGPTAPI } from "chatgpt";
 import { z } from "zod";
-import { Logger, LoggerFactory } from "../lib/Logger";
+import { LoggerFactory } from "../module/Logger";
 
 export class ChatApi {
   _internalApiClient;

@@ -1,0 +1,49 @@
+|```mermaid
+graph TB
+  A["User"] -- "Request Guidelines" --> B["Diagrams API"]
+  B -- "Guidelines" --> C["Prompt Module"]
+  C -- "Process Textual Input" --> D["Prompt Module"]
+  C -- "Dependency on<br />OpenAI ChatGPT API" --> E["OpenAI ChatGPT API"]
+  B -- "Transform Data" --> F["Serializer Module"]
+  F -- "Dependency on<br />OpenAI ChatGPT API" --> E
+  B -- "Render Models" --> G["Visualizer Module"]
+  G -- "Dependency on<br />Diagrams API" --> B
+  B -- "Expose Web Interface" --> H["Simple Web Interface"]
+```  |https://showme.redstarplugin.com/d/d:3wexFoOm|
+|```mermaid
+graph TB
+  A["User Input"] -- "Software Requirements" --> PM["Prompt Module"]
+  PM -- "Preprocess<br />Reformat<br />Remove/Add Info" --> OA["OpenAI ChatGPT API"]
+  A -- "Textual Guidelines" --> DA["Diagrams API"]
+  PM -- "Diagram Guidelines and Data" --> SM["Serializer Module"]
+  SM -- "Textual Model in Mermaid Language" --> VIM["Visualizer Module"]
+  VIM -- "Render as Images" --> DA
+  WI["Simple Web Interface"] -- "Modeling Requirement Data" --> A
+```|https://showme.redstarplugin.com/d/d:hLiFM33B|
+|```mermaid
+graph TB
+  A["User"] -- "Textual Input (Software Requirements)" --> B["Prompt Module"]
+  B -- "Preprocess, Reformat, Remove Irrelevant Info, Add Missing Info" --> C["Prompt Module"]
+  B -- "Dependency on OpenAI ChatGPT API" --> D["OpenAI ChatGPT API"]
+  B -- "Processed Data and Guidelines" --> E["Serializer Module"]
+  E -- "Dependency on OpenAI ChatGPT API" --> D
+  E -- "Mermaid Model Text" --> F["Visualizer Module"]
+  F -- "Dependency on Diagrams API" --> G["Diagrams API"]
+  G -- "Rendered Images (e.g., PNG)" --> H["Visualizer Module"]
+  I["Web Interface"] -- "Access and Usage" --> B
+```|https://showme.redstarplugin.com/d/d:zlG1Vmfd|
+|```
+graph TB
+  A["Diagrams API"] -- "Request guidelines" --> B["Prompt Module"]
+  B -- "Accepts textual input" --> C["Users"]
+  B -- "Preprocesses user input" --> D["Prompt Module"]
+  D -- "Reformatting, Removing, Adding" --> E["Prompt Module"]
+  D -- "Dependency on" --> F["OpenAI ChatGPT API"]
+  B -- "Transforms into mermaid" --> G["Serializer Module"]
+  G -- "Dependency on" --> H["OpenAI ChatGPT API"]
+  G -- "Diagram guidelines and data" --> I["Mermaid Model"]
+  G -- "Written in" --> J["Textual Model"]
+  I -- "Render as images" --> K["Visualizer Module"]
+  K -- "Dependency on" --> L["Diagrams API"]
+  M["Simple Web Interface"] -- "Exposes" --> B
+```|https://showme.redstarplugin.com/d/d:P3euRJdb|

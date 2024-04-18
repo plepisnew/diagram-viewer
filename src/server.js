@@ -1,5 +1,6 @@
 import express from "express";
-import { Program } from "./lib/Program";
+import { Program } from "./module/Program";
+import cors from "cors";
 
 const app = express();
 const PORT = 5000;
@@ -9,7 +10,9 @@ const cache = new Map();
 
 app.use(express.json({ strict: false }));
 
-app.get("/model/sync", async (req, res) => {
+app.use(cors({ origin: "http://localhost:5173" }));
+
+app.post("/model/sync", async (req, res) => {
   const payload = req.body;
 
   const response = await program.modelData(payload);
@@ -71,6 +74,14 @@ app.post("/model/async", async (req, res) => {
   }
 
   return res.status(200).json({ url: await job });
+});
+
+app.post("/model/direct", async (req, res) => {
+  const payload = req.body;
+  console.log(payload);
+  const result = await program._diagramsApiClient.render({ model: payload });
+
+  res.status(200).json(result);
 });
 
 app.listen(PORT, () => {

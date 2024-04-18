@@ -1,6 +1,0 @@
-The system should allow users to create accounts
-The system should handle user registration, authentication, and forgotten password flows
-The system should allow users to customize their profile after it has been created
-The system should allow users to create events
-The system should allow users to engage with events by starting discussions
-The system should support admin users who can remove events

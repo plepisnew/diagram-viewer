@@ -1,6 +1,8 @@
 import axios from "axios";
-import { Logger, LoggerFactory } from "../lib/Logger";
+import { LoggerFactory } from "../module/Logger";
 import { z } from "zod";
+import fs from "fs/promises";
+import path from "path";
 
 export class DiagramsApi {
   // Diagrams API discovery
@@ -84,7 +86,7 @@ export class DiagramsApi {
   /**
    * This is a wrapper around the `/render` endpoint, rendering textual models of the specified type into visual artifacts, which are shared with public image URLs.
    * @type {(options: { diagramType?: z.infer<DiagramsApi.DiagramSchema>; language?: z.infer<DiagramsApiLanguageSchema>; model: string; }) =>
-   * Promise<{ message: string; url: string; } | null>}
+   * Promise<string | null>}
    */
   async render(request) {
     const logger = this._loggerFactory.create("Render");
@@ -101,8 +103,12 @@ export class DiagramsApi {
     const escapeDiagramRegex_1 = /```mermaid(?:\n+)?([\s\S]*?)(?:\n+)?```/;
     const escapeDiagramRegex_2 = /```(?:\n+)?([\s\S]*?)(?:\n+)?```/;
 
-    const escapedDiagram =
-      model.match(escapeDiagramRegex_1)?.at(1) || model.match(escapeDiagramRegex_2)?.at(2) || "<empty>";
+    const escapedDiagram = (
+      model.match(escapeDiagramRegex_1)?.at(1) ||
+      model.match(escapeDiagramRegex_2)?.at(1) ||
+      model
+    ).replaceAll("<br />", " ");
+    console.log(model.match(escapeDiagramRegex_1), model.match(escapeDiagramRegex_2));
     logger.log("Escaping diagram from raw response message:", escapedDiagram);
 
     const apiResponse = await this._internalApiClient.get(DiagramsApi._renderPath, {
@@ -121,6 +127,15 @@ export class DiagramsApi {
 
     if (url) {
       logger.log(`Successfully rendered ${language}/${diagramType} to ${url}`);
+
+      const date = new Date();
+
+      const logPath = path.resolve(
+        process.cwd(),
+        "logs",
+        `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}.txt`
+      );
+      await fs.appendFile(logPath, `|${model}|${url}|\n`);
 
       return url;
     }

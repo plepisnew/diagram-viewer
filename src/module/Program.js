@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import { existsSync } from "fs";
 import { DiagramsApi } from "../clients/DiagramsApi";
 import { ChatApi } from "../clients/ChatApi";
-import { Logger, LoggerFactory } from "./Logger";
+import { LoggerFactory } from "./Logger";
 
 export class Program {
   _chatApiClient;
@@ -21,21 +21,26 @@ export class Program {
     await this.modelData({ diagramType, data });
   }
 
-  async modelData({ diagramType, data }) {
+  async modelData({ diagramType, data, systemMessageOverride }) {
     const { guidelines } = await this._diagramsApiClient.getGuidelines({ diagramType });
 
-    const { systemMessage, userMessage } = this._orderMessages({ guidelines, data });
+    const requestSpecification = systemMessageOverride
+      ? { systemMessage: systemMessageOverride, userMessage: data }
+      : this._orderMessages({ guidelines, data });
 
-    const model = await this._chatApiClient.send({ userMessage, systemMessage });
-    const diagramUrl = await this._diagramsApiClient.render({ diagramType, model });
+    const model = await this._chatApiClient.send(requestSpecification);
+    const diagram = await this._diagramsApiClient.render({ diagramType, model });
 
-    return diagramUrl;
+    return diagram;
   }
 
   _orderMessages({ guidelines, data }) {
     const userMessage = data;
 
-    const systemMessage = guidelines;
+    const contextPrompt = true
+      ? ""
+      : "You will be given a list of software requirements to model. The requirements will be separated by newlines. For each software requirement: assess whether it is both relevant and suitable for a context diagram (for example, it should not contain low level details). Before passing a requirement, consider whether or not it adds beneficial context to the model. Remember that this model will be shown to non-technical people. Your task is to construct a textual model according to the following guidelines:";
+    const systemMessage = [contextPrompt, guidelines].join("\n");
 
     return { userMessage, systemMessage };
   }
