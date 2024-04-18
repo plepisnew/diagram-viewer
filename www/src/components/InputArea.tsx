@@ -1,17 +1,14 @@
 import { cn } from "@/utils/cn";
-import React, { ComponentProps } from "react";
+import { ComponentProps, forwardRef } from "react";
 
 export type InputAreaProps = ComponentProps<"textarea">;
 
-export const InputArea: React.FC<InputAreaProps> = ({ className, ...props }) => {
+export const InputArea = forwardRef<HTMLTextAreaElement, InputAreaProps>(({ className, ...props }, ref) => {
   return (
     <textarea
-      className={cn(
-        "p-3",
-        "border border-zinc-500 rounded-md shadow-md bg-zinc-100 hover:bg-zinc-50 active:shadow-none transition-colors",
-        className
-      )}
+      ref={ref}
+      className={cn("resize-none border border-zinc-500 rounded-md shadow-md p-2 bg-zinc-50 outline-none", className)}
       {...props}
     />
   );
-};
+});

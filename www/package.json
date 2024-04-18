@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"tailwindcss --input ./assets/index.css --output ./assets/output.css --watch\"",
+    "dev": "concurrently \"vite\" \"tailwindcss --input ./src/assets/index.css --output ./src/assets/output.css --watch\"",
     "build": "tsc && vite build"
   },
   "dependencies": {
@@ -13,6 +13,8 @@
     "clsx": "^2.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.1.0",
     "tw-merge": "^0.0.1-alpha.3"
   },
   "devDependencies": {
