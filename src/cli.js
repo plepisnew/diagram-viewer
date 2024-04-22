@@ -1,4 +1,4 @@
-import { Program } from "./module/Program";
+import { Program } from "./module/Program.js";
 import path from "path";
 import fs from "fs/promises";
 
@@ -12,7 +12,8 @@ async function main() {
     { encoding: "utf-8" }
   );
 
-  program.modelData({ data, systemMessageOverride: systemMessage });
+  // object, block, component, state, graph
+  program.modelData({ data, systemMessageOverride: systemMessage, diagramType: "object" });
 }
 
 main();

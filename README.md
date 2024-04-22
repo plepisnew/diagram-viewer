@@ -2,11 +2,7 @@
 
 ## Sample usage
 
-The following command will read data from `./assets/data/reqs1.txt`, create a diagram for it, render it and return the result
-
-```sh
-python3 ./src/program.py --input-data ./assets/data/reqs1.txt --api-key {INSERT_YOUR_API_KEY}
-```
+`diagram-viewer` can be consumed either as a service through a HTTP API, or as a standalone command line tool.
 
 ## Prompt Engineering
 
@@ -37,6 +33,20 @@ Such patterns are useful for highly specialized use cases and when issues arise 
 - Template
   - This is a highly universal prompt which defines how prompts should be constructed to obtain structured feedback (i.e. in a specific format that we're expecting). In theory, this means we can integrate the LLM with any software module with ease, because we can design prompts that reliably produce structured (with the schema we want) responses. Although we expect structured data (of certain modeling languages), the output variance is so great, that there isn't a static template we can force ChatGPT to use. We instead achieve this goal with examples and additional context/constraints 
 
+```mermaid
+graph TB
+  A["User"] -- "Requests Modeling Guidelines" --> B["Diagrams API"]
+  B -- "Textual Input (Software Requirements)" --> C["Prompt Module"]
+  C -- "Preprocesses User Input" --> D["Reformat, Remove Irrelevant Info, Add Missing Info"]
+  C -- "Dependencies on OpenAI ChatGPT API" --> E["OpenAI ChatGPT API"]
+  B -- "Diagram Guidelines and Data" --> F["Serializer Module"]
+  F -- "Transforms into Textual Model (mermaid)" --> G["Written in mermaid Language"]
+  F -- "Dependencies on OpenAI ChatGPT API" --> E
+  B -- "Models Rendering Request" --> H["Visualizer Module"]
+  H -- "Renders as Images (e.g. PNG)" --> I["mermaid Models"]
+  H -- "Dependencies on Diagrams API" --> B
+  B -- "Simple Web Interface" --> J["Web Interface"]
+```
 
 ### Error Identification
 

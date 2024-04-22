@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 export class Logger {
   static _index = 0;
   _requestId;

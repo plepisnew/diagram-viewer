@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LoggerFactory } from "../module/Logger";
+import { LoggerFactory } from "../module/Logger.js";
 import { z } from "zod";
 import fs from "fs/promises";
 import path from "path";
@@ -12,7 +12,17 @@ export class DiagramsApi {
 
   // Define contracts based on exposed OpenAPI schema at: https://showme.redstarplugin.com/openapi.json
   static LanguageSchema = z.enum(["mermaid"]);
-  static DiagramSchema = z.enum(["graph", "sequence", "mindmap", "timeline", "entity-relationship"]);
+  static DiagramSchema = z.enum([
+    "graph",
+    "sequence",
+    "mindmap",
+    "timeline",
+    "entity-relationship",
+    "object",
+    "state",
+    "component",
+    "block",
+  ]);
   static Schemas = {
     getGuidelines: {
       Request: z.object({
@@ -108,7 +118,7 @@ export class DiagramsApi {
       model.match(escapeDiagramRegex_2)?.at(1) ||
       model
     ).replaceAll("<br />", " ");
-    console.log(model.match(escapeDiagramRegex_1), model.match(escapeDiagramRegex_2));
+
     logger.log("Escaping diagram from raw response message:", escapedDiagram);
 
     const apiResponse = await this._internalApiClient.get(DiagramsApi._renderPath, {

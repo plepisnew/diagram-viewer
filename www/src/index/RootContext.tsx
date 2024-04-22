@@ -4,9 +4,11 @@ import toast, { ToastOptions } from "react-hot-toast";
 export class RootContext {
   static constants = {
     prefilledInput: [
-      `The application must support user authentication mechanisms to allow users to create accounts, log in securely, and manage their profiles.`,
+      `The application must support user authentication mechanisms to allow users to create accounts and log in securely.`,
+      `The application must support user profiling to allow users to customize their profile.`,
       `Spotify should provide seamless streaming of high-quality audio tracks to users over the internet, allowing for uninterrupted playback.`,
-      `The application must include robust search functionality that enables users to find specific songs, artists, albums, playlists, and genres quickly. Additionally, it should offer personalized music recommendations and discovery features based on user preferences and listening history.`,
+      `The application must include robust search functionality that enables users to find specific songs, artists, albums, playlists, and genres quickly.`,
+      `The application should offer personalized music recommendations and discovery features based on user preferences and listening history.`,
       `Users should be able to create, edit, delete, and organize playlists to curate their music collections according to their preferences and moods.`,
       `The application should allow users to download songs, albums, and playlists for offline playback, enabling them to listen to their favorite music even without an internet connection.`,
       `Spotify should be compatible with various operating systems and devices, including Windows, macOS, iOS, Android, and web browsers, ensuring a consistent user experience across different platforms.`,
@@ -15,7 +17,7 @@ export class RootContext {
       `The application must support radio stations and podcasts, allowing users to discover and listen to live radio broadcasts and on-demand podcasts seamlessly.`,
       `Spotify should provide intuitive playback controls, including play, pause, skip, shuffle, and repeat functionalities, as well as the ability to manage the playback queue easily.`,
       `The application should integrate with users' existing music libraries and local files, allowing them to import and synchronize their own music collections with Spotify's cloud-based platform.`,
-      `Spotify should prioritize accessibility features to ensure that the application is usable by individuals with disabilities. Additionally, it should support multiple languages and localized content to cater to users from diverse linguistic backgrounds.`,
+      `The application should support multiple languages and localized content to cater to users from diverse linguistic backgrounds.`,
     ].join("\n"),
     prefilledPrompt: [
       `Guidelines when creating the graph diagram in any diagram language:`,
@@ -153,7 +155,7 @@ export class RootContext {
       let _intervalId: NodeJS.Timeout;
 
       const httpClient = axios.create({
-        baseURL: import.meta.env.DEV ? "http://localhost:5000" : "/",
+        baseURL: "/",
         headers: {
           "Content-Type": "application/json",
         },
@@ -189,7 +191,6 @@ export class RootContext {
           _intervalId = setInterval(async () => {
             const result = await poll(requestId);
 
-            console.log({ result });
             if (result === true) {
               return;
             }

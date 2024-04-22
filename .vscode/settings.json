@@ -9,7 +9,8 @@
     "preprocess",
     "preprocesses",
     "reqs",
-    "showmediagrams"
+    "showmediagrams",
+    "Xmark"
   ],
   "prettier.printWidth": 120
 }

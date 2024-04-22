@@ -39,7 +39,6 @@ export const RootControl: React.FC = () => {
         { data: userInput, systemMessage: prompt },
         ({ diagramUrl, model }) => {
           toast.dismiss(loadingToastId);
-          console.log({ diagramUrl, model });
           if (diagramUrl) {
             RootContext.procedures.triggerToast(toast.success, "Requirements successfully modeled");
           } else {
@@ -92,7 +91,10 @@ export const RootControl: React.FC = () => {
             </div>
           </Box>
           {context && (
-            <Box className={cn("p-4 transition-all flex-grow")}>
+            <Box className={cn("flex gap-4 p-4 flex-grow [&>button]:flex-grow", "transition-all")}>
+              <Button>
+                Inspect <span className="font-mono mx-1.5">mermaid</span> model
+              </Button>
               {context.diagramUrl && (
                 <a
                   className={cn(
@@ -104,17 +106,13 @@ export const RootControl: React.FC = () => {
                   Open diagram
                 </a>
               )}
-              <Button>
-                Inspect <span className="font-mono mx-1.5">mermaid</span> model
-              </Button>
-              <div className="max-h-[100px] overflow-y-scroll">{JSON.stringify(context.model)}</div>
             </Box>
           )}
         </div>
         <div className={cn("relative flex basis-[500px] shrink-0")}>
           <InputArea
             rows={12}
-            className={cn("w-full p-4 pb-20 font-mono leading-5 ")}
+            className={cn("w-full p-4 pb-20 font-mono leading-5")}
             value={prompt}
             onChange={handleChangePrompt}
             placeholder="If this field is set, its value will be used as the `system_message` parameter for the Chat Completion API request"

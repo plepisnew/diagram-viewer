@@ -578,16 +578,6 @@ video {
   right: 0px;
 }
 
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.mx-2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
 .mx-1 {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
@@ -596,6 +586,11 @@ video {
 .mx-1\.5 {
   margin-left: 0.375rem;
   margin-right: 0.375rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .inline-block {
@@ -610,20 +605,12 @@ video {
   height: 100%;
 }
 
-.h-\[200px\] {
-  height: 200px;
-}
-
 .max-h-\[400px\] {
   max-height: 400px;
 }
 
 .max-h-full {
   max-height: 100%;
-}
-
-.max-h-\[100px\] {
-  max-height: 100px;
 }
 
 .w-\[1200px\] {
@@ -924,4 +911,8 @@ body, html, #root {
 
 .\[\&\>button\]\:flex-1>button {
   flex: 1 1 0%;
+}
+
+.\[\&\>button\]\:flex-grow>button {
+  flex-grow: 1;
 }

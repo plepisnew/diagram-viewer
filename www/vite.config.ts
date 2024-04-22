@@ -7,6 +7,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5001,
+    proxy: {
+      "^(/model/async|/model/sync|/model/direct)": "http://localhost:5000"
+    }
   },
   build: {
     outDir: path.resolve(process.cwd(), "..", "public")
@@ -15,5 +18,5 @@ export default defineConfig({
     alias: {
       "@": path.resolve(process.cwd(), "src")
     }
-  }
+  },
 })

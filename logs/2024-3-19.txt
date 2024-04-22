@@ -1,0 +1,132 @@
+|```mermaid
+graph TB
+  UA["User Authentication"] --> AA["Account Creation"]
+  UA --> AL["Log In"]
+  UA --> MP["Manage Profile"]
+  
+  SS["Seamless Streaming"] --> HQ["High-Quality Audio Tracks"]
+  SS --> UP["Uninterrupted Playback"]
+  
+  SF["Robust Search Functionality"] --> FS["Find Songs, Artists, Albums, Playlists, Genres"]
+  SF --> PMR["Personalized Music Recommendations"]
+  SF --> DF["Discovery Features"]
+  
+  PL["Playlist Management"] --> C["Create"]
+  PL --> E["Edit"]
+  PL --> D["Delete"]
+  PL --> O["Organize"]
+  
+  D["Download for Offline Playback"]
+  
+  CP["Compatibility with Operating Systems and Devices"] --> W["Windows"]
+  CP --> M["macOS"]
+  CP --> iOS
+  CP --> Android
+  CP --> WB["Web Browsers"]
+  
+  SFM["Social Features"] --> SM["Share Music"]
+  SFM --> SP["Share Playlists"]
+  SFM --> LA["Listening Activities"]
+  
+  UI["Customizable User Interfaces and Settings"] --> AQ["Audio Quality"]
+  UI --> PC["Playback Controls"]
+  UI --> TO["Theme Options"]
+  
+  RS["Radio Stations and Podcasts"] --> LR["Live Radio Broadcasts"]
+  RS --> OP["On-Demand Podcasts"]
+  
+  PC["Playback Controls"] --> PP["Play"]
+  PC --> PS["Pause"]
+  PC --> SK["Skip"]
+  PC --> SH["Shuffle"]
+  PC --> RP["Repeat"]
+  PC --> MQ["Manage Queue"]
+  
+  IM["Integration with Existing Music Libraries"] --> LF["Local Files"]
+  IM --> SC["Synchronize Collections"]
+  
+  ACC["Accessibility Features"]
+  
+  ML["Multiple Languages"]
+  ML --> LC["Localized Content"]
+```  |https://showme.redstarplugin.com/d/d:RPwMHnGK|
+|```mermaid
+graph TB
+  A["User Authentication"] --> B["Create Account"]
+  A --> C["Log In Securely"]
+  A --> D["Manage Profile"]
+  
+  E["Seamless Streaming"] --> F["High-Quality Audio Tracks"]
+  
+  G["Robust Search Functionality"] --> H["Find Songs, Artists, Albums, Playlists, Genres"]
+  G --> I["Personalized Recommendations"]
+  G --> J["Discovery Features"]
+  
+  K["Create, Edit, Delete Playlists"] --> L["Curate Music Collections"]
+  
+  M["Download for Offline Playback"] --> N["Listen Without Internet Connection"]
+  
+  O["Compatibility with Various OS and Devices"] --> P["Windows"]
+  O --> Q["macOS"]
+  O --> R["iOS"]
+  O --> S["Android"]
+  O --> T["Web Browsers"]
+  
+  U["Social Features Integration"] --> V["Share Music, Playlists, Listening Activities"]
+  
+  W["Customizable User Interfaces and Settings"] --> X["Adjust Audio Quality"]
+  W --> Y["Playback Controls"]
+  W --> Z["Theme Options"]
+  
+  AA["Support Radio Stations and Podcasts"] --> AB["Discover Live Radio Broadcasts"]
+  AA --> AC["Listen to On-Demand Podcasts"]
+  
+  AD["Intuitive Playback Controls"] --> AE["Play"]
+  AD --> AF["Pause"]
+  AD --> AG["Skip"]
+  AD --> AH["Shuffle"]
+  AD --> AI["Repeat"]
+  AD --> AJ["Manage Playback Queue"]
+  
+  AK["Integration with Existing Music Libraries"] --> AL["Import and Sync Music Collections"]
+  
+  AM["Accessibility Features"] --> AN["Usable by Individuals with Disabilities"]
+  AM --> AO["Support Multiple Languages"]
+  AM --> AP["Localized Content"]
+```|https://showme.redstarplugin.com/d/d:dmkMNlX9|
+|```mermaid
+graph TB
+  A["User Authentication"] --> B["Create Accounts"]
+  A -- "Log In Securely" --> B
+  A -- "Manage Profiles" --> B
+
+  C["Seamless Streaming"] --> D["High-Quality Audio Tracks"]
+
+  E["Robust Search Functionality"] --> F["Find Songs, Artists, Albums, Playlists, Genres"]
+  E -- "Personalized Recommendations" --> F
+
+  G["Create, Edit, Delete Playlists"] --> H["Organize Music Collections"]
+
+  I["Download Songs, Albums, Playlists"] --> J["Offline Playback"]
+
+  K["Compatible with Various OS and Devices"] --> L["Windows"]
+  K -- "macOS" --> L
+  K -- "iOS" --> L
+  K -- "Android" --> L
+  K -- "Web Browsers" --> L
+
+  M["Social Features"] --> N["Share Music, Playlists, Listening Activities"]
+
+  O["Customizable User Interfaces"] --> P["Adjust Audio Quality, Playback Controls, Themes"]
+
+  Q["Support Radio Stations and Podcasts"] --> R["Discover Live Radio, On-Demand Podcasts"]
+
+  S["Intuitive Playback Controls"] --> T["Play, Pause, Skip, Shuffle, Repeat"]
+  S -- "Manage Playback Queue" --> T
+
+  U["Integrate with Existing Music Libraries"] --> V["Import, Sync Local Files"]
+
+  W["Accessibility Features"] --> X["Usable by Individuals with Disabilities"]
+  W -- "Support Multiple Languages" --> X
+  W -- "Localized Content" --> X
+```|https://showme.redstarplugin.com/d/d:RIq3vWLM|

@@ -1,15 +1,8 @@
 [Import/Export]: KeePass can support importing data from CSV files, Code Wallet, Password Safe and Personal Vault.
-
 [Integration]: KeePass uses Global Hot Key to restore KeePass main window and Limit to single instance option to run only one instance of KeePass at a time.
-
 [Password Generator]: There are available generations based on character sets and based on patterns the first for generating random passwords and the second for creating passwords which require specific patterns. There is also available generating passwords that follow rules which are determined further down on this document. Then there are security-reducing options which reduce the security of the passwords they are applied to. Finally there are configuring settings of automatically generated passwords for new entries so that a random password will automatically be created by KeePass when a new entry is wanted.
-
 [Secure Edit Controls]: KeePass offers the ability for passwords and data to be appeared behind asterisks when the user wants it. When this option is turned on, secure edit controls stronger than the ones of Windows are protecting your data and no one can access them, see them or steal them.
-
 [TAN Support]: KeePass uses TAN-Transaction Authentication Numbers for even more security. This feature can be used for generating one time passwords so that there won’t be any chance, for anyone to access e.g. your bank account even if he finds out that password. That is because when the password is entered one time it becomes useless. TANs can be added using the TANs wizard.
-
 [URL Field]: The URL field supports various special protocols and placeholders and can be used for Standard capabilities where URL field can execute valid URLs for which a protocol handler is defined. In addition to that, KeePass supports all registered protocols that Internet Explorer supports. URL field also offers the ability of executed command lines instead of URLs. Also, placeholders can be used that will be automatically replaced when the URL is executed.
-
 [Using Stored Passwords]: Passwords that are stored in the database can be copied to website accounts and applications with security and without retyping them again. This can be done by several methods such us Context-Sensitive Password List, Drag and Drop, Auto-Type and KeeForm. All of them are explained better further down.Software Requirements Specification for KeePass Password Safe
-
 [Lock Workspace]: Last but not least at all is the locking workspace feature. This feature is turned on and locks the database when minimized. So to unlock it the Master Key is required again. The workspace can be locked manually as well by selecting this option from File menu.

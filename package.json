@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "## Sample usage",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon ./app/server.js",
-    "start": "node ./app/server.js"
+    "dev": "ENVIRONMENT=dev nodemon ./src/server.js",
+    "start": "ENVIRONMENT=prod node ./src/server.js"
   },
   "keywords": [],
   "author": "",

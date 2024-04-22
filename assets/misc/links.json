@@ -8,9 +8,16 @@
     "href": "https://plugin.surf/plugin/show-me-diagrams"
   },
   {
+    "to": "OpenAI API dashboard",
+    "href": "https://platform.openai.com/usage"
+  },
+  {
     "to": "Knowledge Expansion: Diagrams",
     "href": [
-      "https://github.com/plantuml-stdlib/C4-PlantUML"
+      "https://github.com/plantuml-stdlib/C4-PlantUML",
+      "https://www.mermaidchart.com",
+      "https://mermaid.live",
+      "https://mermaid.js.org/syntax/c4.html"
     ]
   }
 ]

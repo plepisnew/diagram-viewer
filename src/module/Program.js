@@ -1,8 +1,8 @@
 import fs from "fs/promises";
 import { existsSync } from "fs";
-import { DiagramsApi } from "../clients/DiagramsApi";
-import { ChatApi } from "../clients/ChatApi";
-import { LoggerFactory } from "./Logger";
+import { DiagramsApi } from "../clients/DiagramsApi.js";
+import { ChatApi } from "../clients/ChatApi.js";
+import { LoggerFactory } from "./Logger.js";
 
 export class Program {
   _chatApiClient;
@@ -29,9 +29,9 @@ export class Program {
       : this._orderMessages({ guidelines, data });
 
     const model = await this._chatApiClient.send(requestSpecification);
-    const diagram = await this._diagramsApiClient.render({ diagramType, model });
+    const diagramUrl = await this._diagramsApiClient.render({ diagramType, model });
 
-    return diagram;
+    return { model, diagramUrl };
   }
 
   _orderMessages({ guidelines, data }) {
