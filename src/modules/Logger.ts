@@ -1,16 +1,12 @@
-import crypto from "crypto";
-
 export class Logger {
-  static _index = 0;
-  _requestId;
-  _prefix;
+  private static _index = 0;
+  private readonly _prefix: string;
 
-  constructor(prefix) {
-    this._requestId = crypto.randomUUID();
+  constructor(prefix: string) {
     this._prefix = prefix;
   }
 
-  log(message, payload, maxLines) {
+  log(message: any, payload?: any, maxLines: number = 10) {
     Logger._index++;
 
     const messageLine = `${this._prefix} ${Date.now()} -- ${message}`;
@@ -31,13 +27,13 @@ export class Logger {
 }
 
 export class LoggerFactory {
-  _scope;
+  private readonly _scope: string;
 
-  constructor(scope) {
+  constructor(scope: string) {
     this._scope = scope;
   }
 
-  create(subScope) {
+  create(subScope: string) {
     const prefix = `[${this._scope}:${subScope}]`;
     const logger = new Logger(prefix);
 

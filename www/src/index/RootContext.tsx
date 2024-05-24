@@ -150,60 +150,58 @@ export class RootContext {
     pollInterval: 1000,
   };
 
-  static modules = {
-    apiClient: (() => {
-      let _intervalId: NodeJS.Timeout;
+  static apiClient = (() => {
+    let _intervalId: NodeJS.Timeout;
 
-      const httpClient = axios.create({
-        baseURL: "/",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    const httpClient = axios.create({
+      baseURL: "/",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      const poll = async (requestId: string): Promise<boolean | { diagramUrl: string; model: string }> => {
-        try {
-          const { data } = await httpClient.post("/model/async", { requestId });
+    const poll = async (requestId: string): Promise<boolean | { diagramUrl: string; model: string }> => {
+      try {
+        const { data } = await httpClient.post("/model/async", { requestId });
 
-          if ("message" in data) {
-            return true;
+        if ("message" in data) {
+          return true;
+        }
+
+        return data;
+      } catch (err) {
+        return false;
+      }
+    };
+    return {
+      requestModel: async (
+        request: { data: string; systemMessage?: string },
+        onResolve: (resolveOptions: { diagramUrl: string; model: string }) => void,
+        onReject: () => void
+      ): Promise<{ requestId: string }> => {
+        const {
+          data: { requestId },
+        } = await httpClient.post("/model/async", {
+          diagramType: "graph",
+          data: request.data,
+          systemMessageOverride: request.systemMessage,
+        });
+
+        _intervalId = setInterval(async () => {
+          const result = await poll(requestId);
+
+          if (result === true) {
+            return;
           }
 
-          return data;
-        } catch (err) {
-          return false;
-        }
-      };
-      return {
-        requestModel: async (
-          request: { data: string; systemMessage?: string },
-          onResolve: (resolveOptions: { diagramUrl: string; model: string }) => void,
-          onReject: () => void
-        ): Promise<{ requestId: string }> => {
-          const {
-            data: { requestId },
-          } = await httpClient.post("/model/async", {
-            diagramType: "graph",
-            data: request.data,
-            systemMessageOverride: request.systemMessage,
-          });
+          clearInterval(_intervalId);
+          result ? onResolve(result) : onReject();
+        }, RootContext.constants.pollInterval);
 
-          _intervalId = setInterval(async () => {
-            const result = await poll(requestId);
-
-            if (result === true) {
-              return;
-            }
-
-            clearInterval(_intervalId);
-            result ? onResolve(result) : onReject();
-          }, RootContext.constants.pollInterval);
-
-          return { requestId };
-        },
-      };
-    })(),
-  };
+        return { requestId };
+      },
+    };
+  })();
 
   static procedures = {
     triggerToast: (handler: (typeof toast)["custom"], text: string, options?: ToastOptions) => {

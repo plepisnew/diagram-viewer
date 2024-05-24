@@ -4,6 +4,7 @@
     "Canvg",
     "fullscreen",
     "GPTAPI",
+    "Millis",
     "mindmap",
     "openai",
     "preprocess",
@@ -12,5 +13,8 @@
     "showmediagrams",
     "Xmark"
   ],
-  "prettier.printWidth": 120
+  "prettier.printWidth": 120,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
